@@ -1,0 +1,52 @@
+/**
+ * @name CopyLast20
+ * @author yulus.
+ * @authorId 936554475810873406
+ * @description Plugin for betterdiscord, that copy last 20 characters from message when u click
+ * @version 2.2.0
+ * @updateUrl https://github.com/yulus420
+ * @source https://github.com/yulus420
+ * @website https://github.com/yulus420
+ */
+//
+
+
+
+const { Plugin } = require('betterdiscord/plugin');
+
+class CopyLast20 extends Plugin {
+  constructor() {
+    super();
+  }
+
+  onStart() {
+    document.addEventListener('click', this.handleMessageClick);
+  }
+
+  onStop() {
+    document.removeEventListener('click', this.handleMessageClick);
+  }
+
+  handleMessageClick(event) {
+    const target = event.target;
+    if (target.classList.contains('message-1PNnaP')) {
+      const messageContent = target.querySelector('.markup-2BOw-j');
+      if (messageContent) {
+        const text = messageContent.textContent;
+        const last20Characters = text.slice(-20);
+        this.copyToClipboard(last20Characters);
+      }
+    }
+  }
+
+  copyToClipboard(text) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+  }
+}
+
+module.exports = CopyLast20;
