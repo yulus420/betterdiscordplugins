@@ -1,52 +1,53 @@
 /**
  * @name CopyLast20
+ * @version 1.0.0
+ * @description A BetterDiscord plugin to copy the last 20 characters from a message
+ * @source https://github.com/yulus420/betterdiscordplugins
+ * @website https://github.com/yulus420/betterdiscordplugins
  * @author yulus.
- * @authorId 936554475810873406
- * @description Plugin for betterdiscord, that copy last 20 characters from message when u click
- * @version 2.2.0
- * @updateUrl https://raw.githubusercontent.com/yulus420/betterdiscordplugins/main/copylast20
- * @source https://raw.githubusercontent.com/yulus420/betterdiscordplugins/main/copylast20
- * @website https://raw.githubusercontent.com/yulus420/betterdiscordplugins/main/copylast20
+ * @invite SomeInviteCode
+ * @donate SomeDonateLink
+ * @patreon SomePatreonLink
  */
-//
 
-
-
-const { Plugin } = require('betterdiscord/plugin');
-
-class CopyLast20 extends Plugin {
-  constructor() {
-    super();
-  }
-
-  onStart() {
-    document.addEventListener('click', this.handleMessageClick);
-  }
-
-  onStop() {
-    document.removeEventListener('click', this.handleMessageClick);
-  }
-
-  handleMessageClick(event) {
-    const target = event.target;
-    if (target.classList.contains('message-1PNnaP')) {
-      const messageContent = target.querySelector('.markup-2BOw-j');
-      if (messageContent) {
-        const text = messageContent.textContent;
-        const last20Characters = text.slice(-20);
-        this.copyToClipboard(last20Characters);
+module.exports = () => ({
+    start() {
+      // Code to run when the plugin is enabled (started)
+      const messageContainer = document.querySelector('.messages-3amgkR'); // Replace with your message container selector
+  
+      if (messageContainer) {
+        messageContainer.addEventListener('click', this.handleMessageClick);
       }
+    },
+  
+    stop() {
+      // Code to run when the plugin is disabled (stopped)
+      const messageContainer = document.querySelector('.messages-3amgkR'); // Replace with your message container selector
+  
+      if (messageContainer) {
+        messageContainer.removeEventListener('click', this.handleMessageClick);
+      }
+    },
+  
+    handleMessageClick(event) {
+      const target = event.target;
+      if (target.classList.contains('message-1PNnaP')) {
+        const messageContent = target.querySelector('.markup-2BOw-j');
+        if (messageContent) {
+          const text = messageContent.textContent;
+          const last20Characters = text.slice(-20);
+          this.copyToClipboard(last20Characters);
+        }
+      }
+    },
+  
+    copyToClipboard(text) {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
     }
-  }
-
-  copyToClipboard(text) {
-    const textArea = document.createElement('textarea');
-    textArea.value = text;
-    document.body.appendChild(textArea);
-    textArea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textArea);
-  }
-}
-
-module.exports = CopyLast20;
+  });
+  
